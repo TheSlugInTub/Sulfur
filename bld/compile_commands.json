@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/mnt/d/repos/Sulfur/bld",
+  "command": "/usr/sbin/cc  -I/mnt/d/repos/Sulfur/include  -o CMakeFiles/Sulfur.dir/src/lexer.c.o -c /mnt/d/repos/Sulfur/src/lexer.c",
+  "file": "/mnt/d/repos/Sulfur/src/lexer.c",
+  "output": "CMakeFiles/Sulfur.dir/src/lexer.c.o"
+},
+{
+  "directory": "/mnt/d/repos/Sulfur/bld",
+  "command": "/usr/sbin/cc  -I/mnt/d/repos/Sulfur/include  -o CMakeFiles/Sulfur.dir/src/main.c.o -c /mnt/d/repos/Sulfur/src/main.c",
+  "file": "/mnt/d/repos/Sulfur/src/main.c",
+  "output": "CMakeFiles/Sulfur.dir/src/main.c.o"
+}
+]
