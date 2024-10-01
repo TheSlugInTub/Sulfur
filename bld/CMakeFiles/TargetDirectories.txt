@@ -1,3 +1,0 @@
-/mnt/d/repos/Sulfur/bld/CMakeFiles/Sulfur.dir
-/mnt/d/repos/Sulfur/bld/CMakeFiles/edit_cache.dir
-/mnt/d/repos/Sulfur/bld/CMakeFiles/rebuild_cache.dir

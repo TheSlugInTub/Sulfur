@@ -1,1 +1,0 @@
-/usr/sbin/cc CMakeFiles/Sulfur.dir/src/lexer.c.o CMakeFiles/Sulfur.dir/src/main.c.o -o Sulfur
