@@ -8,7 +8,6 @@ char output[10000];
 
 NodeStmt PeekNode(const int offset, NodeProg progNodeM)
 {
-    printf("Prog index: %d, Node index + offset: %d\n", progIndex, nodeIndex + offset);
     if (nodeIndex + offset >= progIndex)
     {
         NodeStmt stmt;
@@ -29,8 +28,7 @@ void Assemble(const char* filename, NodeProg progNodeM)
         NodeStmt stmt = progNodeM.statements[nodeIndex];
         nodeIndex++;
 
-        printf("It aint empty\n");
-        printf("Type of node: %d\n", stmt.type);
+        printf("Assembling node: %d\n", stmt.type);
 
         if (stmt.type == StmtExit)
         {

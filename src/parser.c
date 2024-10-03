@@ -39,11 +39,10 @@ NodeProg Parse()
             nodeStmt.type = StmtExit;
             nodeStmt.exit = exitNode;
             prog.statements[progIndex] = nodeStmt;
+            stmtIndex = stmtIndex + 4;
             progIndex++;
         }
     }
-
-    printf("Prog index: %d\n", progIndex);
 
     return prog;
 }

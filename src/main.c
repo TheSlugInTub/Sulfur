@@ -48,8 +48,6 @@ int main(int argc, char** argv)
 
     NodeProg progNodeM = Parse();
 
-    printf("Exit node return value: %d\n", progNodeM.statements[0].type);
-
     Assemble("out.asm", progNodeM);
     system("nasm -felf64 out.asm");    
     system("ld -o out out.o");
