@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/lexer.h"
+#include "../include/parser.h"
+#include "../include/assembler.h"
 
 int main(int argc, char** argv)
 {
@@ -44,11 +46,13 @@ int main(int argc, char** argv)
         printf("Token: Type %d, Value %s\n", tokenArray[i].type, tokenArray[i].value);
     }
 
-    // Output
-    FILE* outFile;
-    outFile = fopen("output.asm", "w");
-    fprintf(outFile, "%s", source);
-    fclose(outFile);
+    NodeProg progNodeM = Parse();
+
+    printf("Exit node return value: %d\n", progNodeM.statements[0].type);
+
+    Assemble("out.asm", progNodeM);
+    system("nasm -felf64 out.asm");    
+    system("ld -o out out.o");
 
     free(source);
     return 0;

@@ -81,7 +81,6 @@ Token* Lex(const char* source)
             tokenIndex++;
         }else if (isspace(ch))
         {
-            printf("Space detected");
         }else 
         {
             printf("Unknown symbol of %c\n", ch);

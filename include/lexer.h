@@ -3,6 +3,7 @@
 
 typedef enum
 {
+    TokenEmpty = 0,
     TokenExit,
     TokenOpenParen,
     TokenCloseParen,
