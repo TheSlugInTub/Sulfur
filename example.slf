@@ -1,1 +1,2 @@
-exit(4);
+printf("Hello, world!");
+exit(8);

@@ -1,5 +1,6 @@
 #include "../include/parser.h"
 #include <stdio.h>
+#include <string.h>
 
 NodeProg prog;
 int stmtIndex = 0;
@@ -40,6 +41,19 @@ NodeProg Parse()
             nodeStmt.exit = exitNode;
             prog.statements[progIndex] = nodeStmt;
             stmtIndex = stmtIndex + 4;
+            progIndex++;
+        }else if (tok.type == TokenPrint)
+        {
+            NodePrint printNode;
+            Token strTok = PeekTok(1);
+
+            strcpy(printNode.message, strTok.value);
+
+            NodeStmt nodeStmt;
+            nodeStmt.type = StmtPrint;
+            nodeStmt.print = printNode;
+            prog.statements[progIndex] = nodeStmt;
+            
             progIndex++;
         }
     }

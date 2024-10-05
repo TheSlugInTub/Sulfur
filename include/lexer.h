@@ -5,16 +5,18 @@ typedef enum
 {
     TokenEmpty = 0,
     TokenExit,
+    TokenPrint,
     TokenOpenParen,
     TokenCloseParen,
     TokenSemicolon,
-    TokenNumber
+    TokenNumber,
+    TokenStringLiteral
 } TokenType;
 
 typedef struct
 {
     TokenType type;
-    char value[10];
+    char value[100];
     int intValue;
 } Token;
 

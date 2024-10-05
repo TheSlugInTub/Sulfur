@@ -5,6 +5,7 @@
 
 int nodeIndex = 0;
 char output[10000];
+char dataSec[10000];
 
 NodeStmt PeekNode(const int offset, NodeProg progNodeM)
 {
@@ -20,8 +21,10 @@ NodeStmt PeekNode(const int offset, NodeProg progNodeM)
 
 void Assemble(const char* filename, NodeProg progNodeM)
 {
-    const char* cat1 = "global _start\n\n_start:\n";
+    const char* cat1 = "section .text\n    global _start\n\n_start:\n";
     strcat(output, cat1);
+    const char* cat2 = "section .data\n";
+    strcat(dataSec, cat2);
 
     while (PeekNode(0, progNodeM).type != StmtEmpty)
     {
@@ -38,14 +41,28 @@ void Assemble(const char* filename, NodeProg progNodeM)
             
             char exitValueInstruction[50];
 
-            sprintf(exitValueInstruction, "    mov rdi, %d\n    syscall", exitValue);
+            sprintf(exitValueInstruction, "    mov rdi, %d\n    syscall\n", exitValue);
             strcat(output, exitValueInstruction);
+        }else if (stmt.type == StmtPrint)
+        {
+            const char* stringData = "    msg db \'";
+            strcat(dataSec, stringData);
+            strcat(dataSec, stmt.print.message);
+            strcat(dataSec, "\', 0xA\n    msg_len equ $ - msg\n");
+            
+            char printInstruction[100];
+
+            sprintf(printInstruction, "    mov rax, 1\n    mov rdi, 1\n    mov rsi, msg\n    mov rdx, msg_len\n    syscall\n");
+            strcat(output, printInstruction);
         }
     }
+
+    strcat(dataSec, "\n");
+    strcat(dataSec, output);
 
     // Output
     FILE* outFile;
     outFile = fopen(filename, "w");
-    fprintf(outFile, "%s", output);
+    fprintf(outFile, "%s", dataSec);
     fclose(outFile);
 }

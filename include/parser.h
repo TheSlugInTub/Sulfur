@@ -5,7 +5,9 @@
 
 typedef enum
 {
-    StmtEmpty = 0, StmtExit
+    StmtEmpty = 0, 
+    StmtExit,
+    StmtPrint
 } StmtType;
 
 typedef struct
@@ -15,7 +17,16 @@ typedef struct
 
 typedef struct
 {
-    NodeExit exit;
+    char message[100];
+} NodePrint;
+
+typedef struct
+{
+    union 
+    {
+        NodeExit exit;
+        NodePrint print;
+    };
     StmtType type;
 } NodeStmt;
 
