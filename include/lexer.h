@@ -10,7 +10,11 @@ typedef enum
     TokenCloseParen,
     TokenSemicolon,
     TokenNumber,
-    TokenStringLiteral
+    TokenStringLiteral,
+    TokenIdentifier,
+    TokenEqual,
+
+    TokenTypeInt
 } TokenType;
 
 typedef struct

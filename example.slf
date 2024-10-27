@@ -1,2 +1,11 @@
 printf("Hello, world!");
-exit(8);
+
+int hey;
+
+int heybro;
+
+hey = 5;
+
+heybro = 13;
+
+exit(133);

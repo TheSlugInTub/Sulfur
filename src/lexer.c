@@ -52,22 +52,44 @@ Token* Lex(const char* source)
                 strcpy(newToken.value, "printf");
                 tokens[tokenIndex] = newToken; 
                 tokenIndex++;
+            }else if (strcmp(ident, "int") == 0)
+            {
+                Token newToken;
+                newToken.type = TokenTypeInt;
+                strcpy(newToken.value, "int");
+                tokens[tokenIndex] = newToken; 
+                tokenIndex++;
             }else 
             {
-                char errorMsg[50];
-                sprintf(errorMsg, "Unkown identifier of %s\n", ident);
-                MakeError(ErrorUnknownIdentifier, errorMsg);
+                Token newToken;
+                newToken.type = TokenIdentifier;
+                strcpy(newToken.value, ident);
+                tokens[tokenIndex] = newToken; 
+                tokenIndex++;
             }
         }else if (isdigit(ch))
         {
             Token newToken;
             newToken.type = TokenNumber; 
-            int intNumber = ch - '0';
-            newToken.intValue =  intNumber;
+            
+            char charNumber[30];
+            int charIndex = 0;
+
+            while (isdigit(source[srcIndex]))
+            {
+                charNumber[charIndex] = source[srcIndex];
+                charIndex++;
+                srcIndex++;
+            }
+            charNumber[charIndex] = '\0';
+
+            int intNumber;
+            sscanf(charNumber, "%d", &intNumber);
+
+            newToken.intValue = intNumber;
             strcpy(newToken.value, "Number");
             tokens[tokenIndex] = newToken;
             tokenIndex++;
-            srcIndex++;
         }else if (ch == '(')
         {
             Token newToken;
@@ -88,6 +110,13 @@ Token* Lex(const char* source)
             Token newToken;
             newToken.type = TokenSemicolon;
             strcpy(newToken.value, ";");
+            tokens[tokenIndex] = newToken;
+            tokenIndex++;
+            srcIndex++;
+        }else if (ch == '=') {
+            Token newToken;
+            newToken.type = TokenEqual;
+            strcpy(newToken.value, "=");
             tokens[tokenIndex] = newToken;
             tokenIndex++;
             srcIndex++;
