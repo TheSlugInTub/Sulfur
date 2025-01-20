@@ -2,7 +2,7 @@
 
 Sulfur is a C-like programming language, which lets you get very low-level
 
-This compiler is written in C, and hopefully it gets to a point where the compiler can be written in itself.
+This compiler is written in C++, and hopefully it gets to a point where the compiler can be written in itself.
 
 # Getting started
 
