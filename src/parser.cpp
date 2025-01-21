@@ -79,6 +79,12 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
                 Consume(); // Consume open paren
                 NodeExit exit = {.returnCode = token.intValue};
                 NodeStatement stmt = {.type = StatementType::Stmt_Exit, .exit = exit};
+                
+                if (PeekTok(1).type != TokenType::Token_Semicolon)
+                {
+                    Error err = {.message = "Expected a semicolon after the statement", .lineNum = token.lineNum};
+                    MakeError(err);
+                }
 
                 head.statements.push_back(stmt);
 
