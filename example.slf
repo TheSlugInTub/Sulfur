@@ -1,7 +1,6 @@
+int hey;
+hey = 2;
+float bruh;
+bruh = 2.0512;
+
 exit(1);
-
-int hey = 26;
-
-!
-
-float bruh = 48.5125;
