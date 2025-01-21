@@ -33,32 +33,33 @@ std::vector<Token> Lex(const std::string& source)
 
             if (str == "int")
             {
-                Token tok{.type = TokenType::Token_Int};
+                Token tok{.type = TokenType::Token_Int, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "char")
             {
-                Token tok{.type = TokenType::Token_Char};
+                Token tok{.type = TokenType::Token_Char, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "float")
             {
-                Token tok{.type = TokenType::Token_Float};
+                Token tok{.type = TokenType::Token_Float, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "double")
             {
-                Token tok{.type = TokenType::Token_Double};
+                Token tok{.type = TokenType::Token_Double, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "exit")
             {
-                Token tok{.type = TokenType::Token_Exit};
+                Token tok{.type = TokenType::Token_Exit, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else 
             {
-                Token tok{.type = TokenType::Token_Identifier, .stringValue = str};
+                Token tok{.type = TokenType::Token_Identifier, .stringValue = str,
+                                                               .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             continue;
@@ -80,12 +81,14 @@ std::vector<Token> Lex(const std::string& source)
 
             if (isFloat)
             {
-                Token tok{.type = TokenType::Token_FloatLiteral, .floatValue = std::stof(str)};
+                Token tok{.type = TokenType::Token_FloatLiteral,
+                    .floatValue = std::stof(str), .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else
             {
-                Token tok{.type = TokenType::Token_IntLiteral, .intValue = std::stoi(str)};
+                Token tok{.type = TokenType::Token_IntLiteral,
+                    .intValue = std::stoi(str), .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             continue;
@@ -93,28 +96,28 @@ std::vector<Token> Lex(const std::string& source)
 
         if (ch == '=')
         {
-            Token tok{.type = TokenType::Token_Equal};
+            Token tok{.type = TokenType::Token_Equal, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
         if (ch == ';')
         {
-            Token tok{.type = TokenType::Token_Semicolon};
+            Token tok{.type = TokenType::Token_Semicolon, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
         if (ch == '(')
         {
-            Token tok{.type = TokenType::Token_OpenParen};
+            Token tok{.type = TokenType::Token_OpenParen, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
         if (ch == ')')
         {
-            Token tok{.type = TokenType::Token_CloseParen};
+            Token tok{.type = TokenType::Token_CloseParen, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }

@@ -27,9 +27,10 @@ struct Token
 {
     TokenType type;
     std::string stringValue;
-    int64_t intValue;
+    int intValue;
     float floatValue;
     double doubleValue;
+    int lineNum;
 };
 
 char Peek(const std::string& source, int currentIndex, int length = 1);

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include "lexer.hpp"
 
 namespace Parser  
 {
@@ -23,13 +24,6 @@ struct Variable
 
 struct NodeDeclaration
 {
-    union 
-    {
-        double doubleValue;
-        float floatValue;
-        int intValue;
-        char charVaue;
-    };
     VariableType type;
 };
 
@@ -43,6 +37,13 @@ struct NodeAssignment
         char charVaue;
     };
     int variableIndex; // Index in NodeHead's variables vector
+    VariableType type;
+};
+
+struct NodeAssignmentToVar
+{
+    int lvalue; // Index in NodeHead's variables vector
+    int rvalue; // Index in NodeHead's variables vector
     VariableType type;
 };
 
@@ -74,5 +75,7 @@ struct NodeHead
     std::vector<NodeStatement> statements;
     std::vector<Variable> variables;
 };
+
+NodeHead Parse(const std::vector<Lexer::Token>& tokens);
 
 }
