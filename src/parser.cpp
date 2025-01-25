@@ -7,7 +7,9 @@ namespace Parser
 using namespace Lexer;
 
 #define PeekTok(peekSize) tokens[index + peekSize]
-#define Consume() index++; token = tokens[index];
+#define Consume() \
+    index++;      \
+    token = tokens[index];
 
 NodeHead Parse(const std::vector<Lexer::Token>& tokens)
 {
@@ -21,6 +23,66 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
         {
             case TokenType::Token_Int:
             {
+                Consume(); // Consume int
+
+                if (PeekTok(0).type != TokenType::Token_Identifier)
+                {
+                    Error err = {.message = "Expected an identifier after 'int'",
+                                 .lineNum = token.lineNum};
+                    MakeError(err);
+                }
+
+                // Check if declaration
+                if (PeekTok(1).type == TokenType::Token_Semicolon)
+                {
+                    NodeDeclaration decl = {.type = VariableType::Var_Int};
+                    NodeStatement   stmt = {.declaration = decl,
+                                            .type = StatementType::Stmt_Declaration};
+                    Variable var = {.identifier = token.stringValue, .type = VariableType::Var_Int};
+                    head.variables.push_back(var);
+                    Consume(); // Consume identifier
+                }
+                // Check if definition
+                else if (PeekTok(1).type == TokenType::Token_Equal)
+                {
+                    if (PeekTok(2).type != TokenType::Token_IntLiteral)
+                    {
+                        Error err = {.message = "Expected an int literal as int definition",
+                                     .lineNum = token.lineNum};
+                        MakeError(err);
+                    }
+
+                    NodeDeclaration decl = {.type = VariableType::Var_Int};
+                    NodeStatement   declStmt = {.declaration = decl,
+                                                .type = StatementType::Stmt_Declaration};
+
+                    Variable var = {.identifier = token.stringValue, .type = VariableType::Var_Int};
+                    head.variables.push_back(var);
+
+                    NodeDefinition def = {.intValue = PeekTok(2).intValue,
+                                          .variableIndex = (int)head.variables.size() - 1};
+                    NodeStatement  defStmt = {.definition = def,
+                                              .type = StatementType::Stmt_Definition};
+                    head.statements.push_back(defStmt);
+                    Consume(); // Consume identifier
+                    Consume(); // Consume equals sign
+                    Consume(); // Consume int literal
+                }
+                else
+                {
+                    Error err = {.message =
+                                     "Expected a semicolon or an equals sign after int declaration",
+                                 .lineNum = token.lineNum};
+                    MakeError(err);
+                }
+
+                if (PeekTok(0).type != TokenType::Token_Semicolon)
+                {
+                    Error err = {.message = "Expected a semicolon after the statement",
+                                 .lineNum = token.lineNum};
+                    MakeError(err);
+                }
+
                 break;
             }
             case TokenType::Token_Char:
@@ -67,22 +129,33 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
             {
                 if (PeekTok(1).type != TokenType::Token_OpenParen)
                 {
-                    Error err = {.message = "Expected '(' after 'exit' because it is built-in compiler function", .lineNum = token.lineNum};
+                    Error err = {
+                        .message =
+                            "Expected '(' after 'exit' because it is built-in compiler function",
+                        .lineNum = token.lineNum};
                     MakeError(err);
                 }
-                Consume(); // Consume exit token
-                if (PeekTok(1).type != TokenType::Token_IntLiteral)
+                Consume();                                          // Consume exit token
+                if (PeekTok(1).type != TokenType::Token_IntLiteral) // current token is open paren
                 {
-                    Error err = {.message = "Expected an int literal as the argument to 'exit' function call", .lineNum = token.lineNum};
+                    Error err = {
+                        .message =
+                            "Expected an int literal as the argument to 'exit' function call",
+                        .lineNum = token.lineNum};
                     MakeError(err);
                 }
-                Consume(); // Consume open paren
-                NodeExit exit = {.returnCode = token.intValue};
-                NodeStatement stmt = {.type = StatementType::Stmt_Exit, .exit = exit};
-                
-                if (PeekTok(1).type != TokenType::Token_Semicolon)
+                Consume(); // Consume open paren, current token is int literal
+
+                NodeExit      exit = {.returnCode = token.intValue};
+                NodeStatement stmt = {.exit = exit, .type = StatementType::Stmt_Exit};
+
+                Consume(); // Consume int literal, current token is close paren
+                Consume(); // Consume close paren, current token is semicolon
+
+                if (PeekTok(0).type != TokenType::Token_Semicolon)
                 {
-                    Error err = {.message = "Expected a semicolon after the statement", .lineNum = token.lineNum};
+                    Error err = {.message = "Expected a semicolon after the statement",
+                                 .lineNum = token.lineNum};
                     MakeError(err);
                 }
 

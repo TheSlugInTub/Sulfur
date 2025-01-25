@@ -27,6 +27,18 @@ struct NodeDeclaration
     VariableType type;
 };
 
+struct NodeDefinition
+{
+    union 
+    {
+        double doubleValue;
+        float floatValue;
+        int intValue;
+        char charVaue;
+    };
+    int variableIndex;
+};
+
 struct NodeAssignment
 {
     union 
@@ -55,8 +67,9 @@ struct NodeExit
 enum StatementType : unsigned char
 {
     Stmt_Declaration = 0,
-    Stmt_Assignment = 1,
-    Stmt_Exit = 2
+    Stmt_Definition = 1,
+    Stmt_Assignment = 2,
+    Stmt_Exit = 3
 };
 
 struct NodeStatement
@@ -64,6 +77,7 @@ struct NodeStatement
     union
     {
         NodeDeclaration declaration;
+        NodeDefinition definition;
         NodeAssignment assignment;
         NodeExit exit;
     };
@@ -75,6 +89,8 @@ struct NodeHead
     std::vector<NodeStatement> statements;
     std::vector<Variable> variables;
 };
+
+inline int currentStackLocation;
 
 NodeHead Parse(const std::vector<Lexer::Token>& tokens);
 
