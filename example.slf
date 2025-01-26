@@ -1,3 +1,5 @@
 int a = 2;
 
+float hey = 1.52;
+
 exit(113);
