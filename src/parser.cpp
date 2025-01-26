@@ -87,6 +87,90 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
             }
             case TokenType::Token_Char:
             {
+                Consume(); // Consume 'char'
+
+                if (PeekTok(0).type != TokenType::Token_Identifier)
+                {
+                    Error err = {.message = "Expected an identifier after 'char'",
+                                 .lineNum = token.lineNum};
+                    MakeError(err);
+                }
+
+                // Check if declaration
+                if (PeekTok(1).type == TokenType::Token_Semicolon)
+                {
+                    NodeDeclaration decl = {.type = VariableType::Var_Char};
+                    NodeStatement   stmt = {.declaration = decl,
+                                            .type = StatementType::Stmt_Declaration};
+                    Variable        var = {.identifier = token.stringValue,
+                                           .type = VariableType::Var_Char};
+                    head.variables.push_back(var);
+                    Consume(); // Consume identifier
+                }
+                // Check if definition
+                else if (PeekTok(1).type == TokenType::Token_Equal)
+                {
+                    if (PeekTok(2).type == TokenType::Token_IntLiteral)
+                    {
+                        NodeDeclaration decl = {.type = VariableType::Var_Char};
+                        NodeStatement   declStmt = {.declaration = decl,
+                                                    .type = StatementType::Stmt_Declaration};
+
+                        Variable var = {.identifier = token.stringValue,
+                                        .type = VariableType::Var_Char};
+                        head.variables.push_back(var);
+
+                        NodeDefinition def = {.charValue = (char)PeekTok(2).intValue,
+                                              .variableIndex = (int)head.variables.size() - 1};
+                        NodeStatement  defStmt = {.definition = def,
+                                                  .type = StatementType::Stmt_Definition};
+                        head.statements.push_back(defStmt);
+                        Consume(); // Consume identifier
+                        Consume(); // Consume equals sign
+                        Consume(); // Consume char literal
+                    }
+                    else if (PeekTok(2).type == TokenType::Token_CharLiteral)
+                    {
+                        NodeDeclaration decl = {.type = VariableType::Var_Char};
+                        NodeStatement   declStmt = {.declaration = decl,
+                                                    .type = StatementType::Stmt_Declaration};
+
+                        Variable var = {.identifier = token.stringValue,
+                                        .type = VariableType::Var_Char};
+                        head.variables.push_back(var);
+
+                        NodeDefinition def = {.charValue = PeekTok(2).charValue,
+                                              .variableIndex = (int)head.variables.size() - 1};
+                        NodeStatement  defStmt = {.definition = def,
+                                                  .type = StatementType::Stmt_Definition};
+                        head.statements.push_back(defStmt);
+                        Consume(); // Consume identifier
+                        Consume(); // Consume equals sign
+                        Consume(); // Consume char literal
+                    }
+                    else
+                    {
+                        Error err = {
+                            .message = "Expected an int literal or char literal as char definition",
+                            .lineNum = token.lineNum};
+                        MakeError(err);
+                    }
+                }
+                else
+                {
+                    Error err = {.message =
+                                     "Expected a semicolon or an equals sign after char declaration",
+                                 .lineNum = token.lineNum};
+                    MakeError(err);
+                }
+
+                if (PeekTok(0).type != TokenType::Token_Semicolon)
+                {
+                    Error err = {.message = "Expected a semicolon after the statement",
+                                 .lineNum = token.lineNum};
+                    MakeError(err);
+                }
+
                 break;
             }
             case TokenType::Token_Float:
@@ -106,7 +190,8 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
                     NodeDeclaration decl = {.type = VariableType::Var_Float};
                     NodeStatement   stmt = {.declaration = decl,
                                             .type = StatementType::Stmt_Declaration};
-                    Variable var = {.identifier = token.stringValue, .type = VariableType::Var_Float};
+                    Variable        var = {.identifier = token.stringValue,
+                                           .type = VariableType::Var_Float};
                     head.variables.push_back(var);
                     Consume(); // Consume identifier
                 }
@@ -124,7 +209,8 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
                     NodeStatement   declStmt = {.declaration = decl,
                                                 .type = StatementType::Stmt_Declaration};
 
-                    Variable var = {.identifier = token.stringValue, .type = VariableType::Var_Float};
+                    Variable var = {.identifier = token.stringValue,
+                                    .type = VariableType::Var_Float};
                     head.variables.push_back(var);
 
                     NodeDefinition def = {.floatValue = PeekTok(2).floatValue,
@@ -138,9 +224,9 @@ NodeHead Parse(const std::vector<Lexer::Token>& tokens)
                 }
                 else
                 {
-                    Error err = {.message =
-                                     "Expected a semicolon or an equals sign after float declaration",
-                                 .lineNum = token.lineNum};
+                    Error err = {
+                        .message = "Expected a semicolon or an equals sign after float declaration",
+                        .lineNum = token.lineNum};
                     MakeError(err);
                 }
 

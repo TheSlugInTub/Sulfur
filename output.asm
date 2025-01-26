@@ -1,7 +1,7 @@
 global _start
 
 section .data
-    floatVal0: dd 1.520000
+    floatVal0: dd 1.530000
 
 section .text
 
@@ -12,6 +12,8 @@ _start:
     sub rsp, 16
     movss xmm0, dword [floatVal0]
     movss [rsp], xmm0
+    sub rsp, 1
+    mov byte [rsp], 77
     mov rax, 60
     mov rdi, 113
     syscall

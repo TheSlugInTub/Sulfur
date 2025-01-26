@@ -34,7 +34,7 @@ struct NodeDefinition
         double doubleValue;
         float floatValue;
         int intValue;
-        char charVaue;
+        char charValue;
     };
     int variableIndex;
 };

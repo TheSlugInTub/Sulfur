@@ -76,6 +76,15 @@ std::string Assemble(NodeHead& head)
                         Instruct(textSection, "sub", "rsp", "16");
                         Instruct(textSection, "movss", "xmm0", "dword [" + dataName + "]");
                         Instruct(textSection, "movss", "[rsp]", "xmm0");
+
+                        break;
+                    }
+                    case VariableType::Var_Char:
+                    {
+                        Instruct(textSection, "sub", "rsp", "1");
+                        Instruct(textSection, "mov", "byte [rsp]",
+                                 std::to_string(PeekStmt(0).definition.intValue));
+                        break;
                     }
                 }
                 break;

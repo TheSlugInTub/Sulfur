@@ -13,7 +13,7 @@ char Peek(const std::string& source, int currentIndex, int length)
 std::vector<Token> Lex(const std::string& source)
 {
     std::vector<Token> tokens;
-    int lineNum = 1;
+    int                lineNum = 1;
 
     for (int index = 0; index < source.length(); index++)
     {
@@ -33,33 +33,34 @@ std::vector<Token> Lex(const std::string& source)
 
             if (str == "int")
             {
-                Token tok{.type = TokenType::Token_Int, .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_Int, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "char")
             {
-                Token tok{.type = TokenType::Token_Char, .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_Char, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "float")
             {
-                Token tok{.type = TokenType::Token_Float, .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_Float, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "double")
             {
-                Token tok{.type = TokenType::Token_Double, .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_Double, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else if (str == "exit")
             {
-                Token tok{.type = TokenType::Token_Exit, .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_Exit, .lineNum = lineNum};
                 tokens.push_back(tok);
             }
-            else 
+            else
             {
-                Token tok{.type = TokenType::Token_Identifier, .stringValue = str,
-                                                               .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_Identifier,
+                           .stringValue = str,
+                           .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             continue;
@@ -67,28 +68,33 @@ std::vector<Token> Lex(const std::string& source)
 
         if (std::isdigit(ch))
         {
-            bool isFloat = false;
+            bool        isFloat = false;
             std::string str = {};
-            str.push_back(ch); 
+            str.push_back(ch);
             while (std::isdigit(Peek(source, index)) || Peek(source, index) == '.')
             {
                 index++;
                 ch = source[index];
                 str.push_back(ch);
 
-                if (ch == '.') { isFloat = true; }
+                if (ch == '.')
+                {
+                    isFloat = true;
+                }
             }
 
             if (isFloat)
             {
-                Token tok{.type = TokenType::Token_FloatLiteral,
-                    .floatValue = std::stof(str), .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_FloatLiteral,
+                           .floatValue = std::stof(str),
+                           .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             else
             {
-                Token tok{.type = TokenType::Token_IntLiteral,
-                    .intValue = std::stoi(str), .lineNum = lineNum};
+                Token tok {.type = TokenType::Token_IntLiteral,
+                           .intValue = std::stoi(str),
+                           .lineNum = lineNum};
                 tokens.push_back(tok);
             }
             continue;
@@ -96,47 +102,61 @@ std::vector<Token> Lex(const std::string& source)
 
         if (ch == '=')
         {
-            Token tok{.type = TokenType::Token_Equal, .lineNum = lineNum};
+            Token tok {.type = TokenType::Token_Equal, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
         if (ch == ';')
         {
-            Token tok{.type = TokenType::Token_Semicolon, .lineNum = lineNum};
+            Token tok {.type = TokenType::Token_Semicolon, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
         if (ch == '(')
         {
-            Token tok{.type = TokenType::Token_OpenParen, .lineNum = lineNum};
+            Token tok {.type = TokenType::Token_OpenParen, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
         if (ch == ')')
         {
-            Token tok{.type = TokenType::Token_CloseParen, .lineNum = lineNum};
+            Token tok {.type = TokenType::Token_CloseParen, .lineNum = lineNum};
             tokens.push_back(tok);
             continue;
         }
 
-        if (ch == '\n') 
-        { 
+        if (ch == '\'')
+        {
+            char charLit = Peek(source, index);
+            index++; // Skip char literal
+            index++; // Skip ' 
+
+            Token tok {.type = TokenType::Token_CharLiteral,
+                       .intValue = (int)charLit,
+                       .charValue = charLit,
+                       .lineNum = lineNum};
+            tokens.push_back(tok);
+            continue;
+        }
+
+        if (ch == '\n')
+        {
             lineNum++;
-            continue; 
+            continue;
         }
 
         if (std::isspace(ch) || ch == '\t')
-        { 
-            continue; 
+        {
+            continue;
         }
 
         std::string err = "Character: ";
         err.push_back(ch);
         err = err + " was not recognized";
-        MakeError(Error{.message = err, .lineNum = lineNum});
+        MakeError(Error {.message = err, .lineNum = lineNum});
 
         index++;
     }
@@ -144,4 +164,4 @@ std::vector<Token> Lex(const std::string& source)
     return tokens;
 }
 
-}
+} // namespace Lexer
